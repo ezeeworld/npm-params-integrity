@@ -1,0 +1,30 @@
+{
+  "name": "params-integrity",
+  "version": "0.2.2",
+  "description": "Lite param checker with simplicity and promises in mind. Easilly checks mandatory fields / keys / values of an object. Aimed a ease Rest API parameter checking.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ezeeworld/npm-params-integrity"
+  },
+  "keywords": [
+    "validator",
+    "parameters",
+    "rest",
+    "integrity",
+    "test"
+  ],
+  "author": "Johan Leche",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/ezeeworld/npm-params-integrity/issues"
+  },
+  "homepage": "https://github.com/ezeeworld/npm-params-integrity",
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "q": "^1.4.1"
+  }
+}
