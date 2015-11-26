@@ -1,7 +1,10 @@
 var q       = require('q');
 var _       = require('lodash');
+var winston = require('winston');
 
-function ParamsIntegrity() {
+function ParamsIntegrity () {
+
+    var self = this;
 
     /**
      * Checks the optional parameters
@@ -11,27 +14,31 @@ function ParamsIntegrity() {
      * @returns {boolean}
      */
     this.checkOptionalParams = function (optionalParams, data) {
-        var deferred = q.defer();
-        var length   = optionalParams.length - 1;
-        var params   = [];
+        var deferred     = q.defer();
+        var length       = optionalParams.length - 1;
+        var success      = true;
+        var errorMessage = "";
+        var params       = {};
 
-        _.forEach(optionalParams, function (param, index) {
+        optionalParams.map(function (param, index) {
 
                 if (!_.isUndefined(data[param.name])) {
                     var expr = new RegExp(param.regex);
                     if (!expr.test(data[param.name])) {
-                        deferred.reject('bad value for ' + param.name + ' (' + param.regex + ')');
-                        return false;
-                    }else {
+                        success      = false;
+                        errorMessage = "bad value for " + param.name + " (" + param.regex + ")";
+                    } else {
                         params[param] = data[param];
                     }
                 }
-
-                if (length == index) {
-                    deferred.resolve(optionalParams);
-                }
             }
         );
+
+        if (success) {
+            deferred.resolve(params);
+        } else {
+            deferred.reject(errorMessage);
+        }
 
         return deferred.promise;
     };
@@ -45,23 +52,29 @@ function ParamsIntegrity() {
      */
     this.checkRequiredParams = function (requiredParams, data) {
 
-        var deferred = q.defer();
-        var length   = requiredParams.length - 1;
-        var params   = [];
+        var deferred     = q.defer();
+        var length       = requiredParams.length - 1;
+        var params       = {};
+        var success      = true;
+        var errorMessage = "";
 
         requiredParams.map(function (param, index) {
 
             if (_.isUndefined(data[param])) {
-                deferred.reject('Param ' + param + ' required');
-                return false;
+                success      = false;
+                errorMessage = 'Param ' + param + ' required';
             } else {
                 params[param] = data[param];
             }
-
-            if (length >= index) {
-                deferred.resolve(params);
-            }
         });
+
+        if (success) {
+            winston.info('[checkRequiredParams] params : ', params);
+            deferred.resolve(params);
+        } else {
+            winston.error('[checkRequiredParams] missing');
+            deferred.reject(errorMessage);
+        }
 
         return deferred.promise;
     };
@@ -78,14 +91,16 @@ function ParamsIntegrity() {
         var deferred = q.defer();
 
         if (new Date(dDateStart) <= new Date(dDateEnd)) {
-            deferred.resolve({start: new Date(dDateStart), end: new Date(dDateEnd)});
+            deferred.resolve({
+                start: new Date(dDateStart),
+                end  : new Date(dDateEnd)
+            });
         } else {
             deferred.reject('dateStart is not <= to dateEnd');
         }
 
         return deferred.promise;
-    }
+    };
 }
-
 
 module.exports = new ParamsIntegrity();
