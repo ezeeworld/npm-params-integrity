@@ -32,5 +32,5 @@ paramsIntegrity.checkRequiredParams([
     })
     .catch(function(error){
         // perform error handling here
-    );
+    });
 ```
