@@ -1,6 +1,6 @@
 {
   "name": "params-integrity",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Lite param checker with simplicity and promises in mind. Easilly checks mandatory fields / keys / values of an object. Aimed a ease Rest API parameter checking.",
   "main": "index.js",
   "scripts": {
