@@ -1,6 +1,5 @@
 var q       = require('q');
 var _       = require('lodash');
-var winston = require('winston');
 
 function ParamsIntegrity () {
 
@@ -69,10 +68,8 @@ function ParamsIntegrity () {
         });
 
         if (success) {
-            winston.info('[checkRequiredParams] params : ', params);
             deferred.resolve(params);
         } else {
-            winston.error('[checkRequiredParams] missing');
             deferred.reject(errorMessage);
         }
 
